@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Seat Booking</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: auto;
+            padding: 20px;
+            background-color: white;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+
+        .seat-map {
+            display: grid;
+            grid-template-columns: repeat(8, 1fr);
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .seat {
+            width: 30px;
+            height: 30px;
+            background-color: #ddd;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .seat.selected {
+            background-color: #007bff;
+            border-color: #0056b3;
+            color: white;
+        }
+
+        .selected-seats {
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        .total-cost {
+            margin-top: 20px;
+            text-align: center;
+            font-weight: bold;
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Movie Seat Booking</h1>
+        <div class="seat-map">
+            <!-- Generate the seats using JavaScript -->
+        </div>
+        <div class="selected-seats">
+            <label for="selectedSeats">Selected Seats:</label>
+            <input type="text" id="selectedSeats" readonly>
+        </div>
+        <div class="total-cost">
+            Total Cost: $<span id="totalCost">0</span>
+        </div>
+    </div>
+
+    <script>
+        const seatMap = document.querySelector('.seat-map');
+        const selectedSeatsInput = document.getElementById('selectedSeats');
+        const totalCostSpan = document.getElementById('totalCost');
+        const seats = [];
+
+        const rows = 6;
+        const seatsPerRow = 8;
+        const ticketPrice = 200; // Ticket price per seat
+
+        // Generate seats
+        for (let row = 1; row <= rows; row++) {
+            for (let seat = 1; seat <= seatsPerRow; seat++) {
+                const seatElement = document.createElement('div');
+                seatElement.classList.add('seat');
+                seatElement.dataset.seat = `Row ${row}, Seat ${seat}`;
+                seatMap.appendChild(seatElement);
+
+                seatElement.addEventListener('click', () => {
+                    seatElement.classList.toggle('selected');
+                    updateSelectedSeatsAndCost();
+                });
+
+                seats.push(seatElement);
+            }
+        }
+
+        function updateSelectedSeatsAndCost() {
+            const selectedSeats = seats.filter(seat => seat.classList.contains('selected'));
+            const seatNames = selectedSeats.map(seat => seat.dataset.seat);
+            selectedSeatsInput.value = seatNames.join(', ');
+
+            const totalCost = selectedSeats.length * ticketPrice;
+            totalCostSpan.textContent = totalCost;
+        }
+    </script>
+</body>
+</html>
